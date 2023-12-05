@@ -1,12 +1,11 @@
 include *.txt
 include *.md
 include *.pkl
-recursive-include ./bikeshare_model *
+recursive-include ./image_captioning *
 
-include bikeshare_model/datasets/bike-rental-dataset.csv
-include bikeshare_model/trained_models/*.pkl
-include bikeshare_model/VERSION
-include bikeshare_model/config.yml
+
+include image_captioning/VERSION
+include image_captioning/config.yml
 
 include ./requirements/requirements.txt
 include ./requirements/test_requirements.txt
