@@ -1,0 +1,41 @@
+#package overview
+package_name: image_captioning
+
+training_data_file: captions.txt
+
+target: caption
+
+pipeline_name: image_captioning
+pipeline_save_file: image_captioning_output_v
+
+features: image
+
+# Set train/test split
+test_size: 0.10
+
+# Set the random seed
+random_state: 42
+
+# Alogrithm parameters
+n_estimators: 100
+max_depth: 10
+
+ENCODER: "google/vit-base-patch16-224"
+DECODER: "gpt2"
+TRAIN_BATCH_SIZE: 4
+VAL_BATCH_SIZE: 4
+VAL_EPOCHS: 1
+LR: 5e-5
+SEED: 42
+MAX_LEN: 128
+SUMMARY_LEN: 20
+WEIGHT_DECAY: 0.01
+MEAN: 0.485
+STD: 0.229
+TRAIN_PCT: 0.95
+NUM_WORKERS: 10
+EPOCHS: 3
+# IMG_SIZE: (224, 224)
+LABEL_MASK: -100
+TOP_K: 1000
+TOP_P: 0.95
