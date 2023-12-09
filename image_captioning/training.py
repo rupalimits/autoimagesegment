@@ -1,6 +1,6 @@
 
 from utilities.utilities_common import *
-from image_captioning.config.core import *
+from config.core import *
 from transformers import Seq2SeqTrainer,Seq2SeqTrainingArguments
 from transformers import default_data_collator, VisionEncoderDecoderModel
 
