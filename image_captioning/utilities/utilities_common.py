@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 from torchvision import transforms
 from torch.utils.data import Dataset
-from config.core import *
+from image_captioning.config.core import *
 from transformers import AutoTokenizer, ViTFeatureExtractor
 
 def build_inputs_with_special_tokens(self, token_ids_0):
@@ -29,6 +29,14 @@ tokenizer.pad_token = tokenizer.unk_token
 feature_extractor = ViTFeatureExtractor.from_pretrained(config.lmodel_config.ENCODER)
 
 
+# load metrics from HuggingFace
+dict_metrics = {"rouge2": evaluate.load("rouge"),
+                "bleu": evaluate.load('bleu'),
+                "bertscore": evaluate.load("bertscore"),
+                "meteor": evaluate.load('meteor')
+                }
+
+
 def compute_metrics(eval_pred):
     """
     Compute the following metrics:
@@ -38,15 +46,11 @@ def compute_metrics(eval_pred):
     4. METEOR : https://huggingface.co/spaces/evaluate-metric/meteor
     Note: the metrics BLEU and METEOR specific files have been downloaded from
             https://github.com/huggingface/datasets/tree/main/metrics
-    :param tokenizer:
     :param eval_pred:
-    :return: dict_metrics
+    :return: dict_metric_scores
     """
-    dict_metrics = {"rouge2": [evaluate.load("rouge")],
-                    # "bleu": [evaluate.load(METRICS_DIR / 'blue')],
-                    "bertscore": [evaluate.load("bertscore")],
-                    # "meteor": [evaluate.load(METRICS_DIR / 'meteor')]
-                    }
+
+    dict_metric_scores = {}
 
     labels_ids = eval_pred.label_ids
     pred_ids = eval_pred.predictions
@@ -57,20 +61,21 @@ def compute_metrics(eval_pred):
     label_str = tokenizer.batch_decode(labels_ids, skip_special_tokens=True)
 
     # calculating various metrics
-    rouge_output = dict_metrics["rouge2"][0].compute(predictions=pred_str, references=label_str, rouge_types=["rouge2"])
-    dict_metrics["rouge2"].append({"rouge2_score": rouge_output['rouge2'], })
-    # dict_metrics["rouge2"].append({"rouge2_precision": round(rouge_output.precision, 4),  "rouge2_recall": round(rouge_output.recall, 4), "rouge2_fmeasure": round(rouge_output.fmeasure, 4),})
+    rouge_output = dict_metrics["rouge2"].compute(predictions=pred_str, references=label_str, rouge_types=["rouge2"])
+    dict_metric_scores["rouge2_score"] = rouge_output['rouge2']
 
-    # bleu_output = dict_metrics["blue"][0].compute(predictions=pred_str, references=label_str)
-    # dict_metrics["blue"].append({"bleu_score": bleu_output['bleu'],})
+    bleu_output = dict_metrics["bleu"].compute(predictions=pred_str, references=label_str)
+    dict_metric_scores["bleu_score"] = bleu_output['bleu']
 
-    bertscore_output = dict_metrics["bertscore"][0].compute(predictions=pred_str, references=label_str, lang="en")
-    dict_metrics["bertscore"].append({"bertscore_precision": bertscore_output['precision'], "bertscore_recall": bertscore_output['recall'], "bertscore_f1": bertscore_output['f1']})
+    bertscore_output = dict_metrics["bertscore"].compute(predictions=pred_str, references=label_str, lang="en")
+    dict_metric_scores["bertscore_precision"] = bertscore_output['precision']
+    dict_metric_scores["bertscore_recall"] = bertscore_output['recall']
+    dict_metric_scores["bertscore_f1"] = bertscore_output['f1']
 
-    # meteor_output = dict_metrics["meteor"][0].compute(predictions=pred_str, references=label_str)
-    # dict_metrics["meteor"].append({"meteor_score": meteor_output['meteor'],})
+    meteor_output = dict_metrics["meteor"].compute(predictions=pred_str, references=label_str)
+    dict_metric_scores["meteor_score"] = meteor_output['meteor']
 
-    return dict_metrics
+    return dict_metric_scores
 
 
 """

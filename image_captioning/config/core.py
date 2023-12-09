@@ -16,7 +16,6 @@ DATASET_DIR = ROOT / "dataset"
 CAPTIONS_DIR = ROOT / "dataset" / "captions.txt"
 IMAGES_DIR = ROOT / "dataset" / "Images"
 TRAINED_MODEL_DIR = ROOT / "trained_models"
-METRICS_DIR = ROOT / "metrics"
 
 
 class AppConfig(BaseModel):
