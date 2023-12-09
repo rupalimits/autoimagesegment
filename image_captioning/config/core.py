@@ -1,31 +1,28 @@
 # Path setup, and access the config.yml file, datasets folder & trained models
 import sys
 from pathlib import Path
-file = Path(__file__).resolve()
-parent, root = file.parent, file.parents[1]
-sys.path.append(str(root))
-
-from pathlib import Path
-from typing import Dict, List
-
 from pydantic import BaseModel
 from strictyaml import YAML, load
 
+file = Path(__file__).resolve()
+parent, root = file.parent, file.parents[1]
+sys.path.append(str(root))
 
 # Project Directories
 PACKAGE_ROOT = Path(__file__).resolve().parent
 ROOT = PACKAGE_ROOT.parent
 CONFIG_FILE_PATH = ROOT / "config.yml"
-
 DATASET_DIR = ROOT / "dataset"
+CAPTIONS_DIR = ROOT / "dataset" / "captions.txt"
+IMAGES_DIR = ROOT / "dataset" / "Images"
 TRAINED_MODEL_DIR = ROOT / "trained_models"
+METRICS_DIR = ROOT / "metrics"
 
 
 class AppConfig(BaseModel):
     """
     Application-level config.
     """
-
     package_name: str
     training_data_file: str
     pipeline_name: str
@@ -37,7 +34,6 @@ class ModelConfig(BaseModel):
     All configuration relevant to model
     training and feature engineering.
     """
-
     target: str
     features: str
 
@@ -53,39 +49,18 @@ class ModelConfig(BaseModel):
     WEIGHT_DECAY: float
     MEAN: float
     STD: float
-    TRAIN_PCT: float
     NUM_WORKERS: int
     EPOCHS: int
-    # IMG_SIZE: tuple
+    IMG_SIZE: int
     LABEL_MASK: int
     TOP_K: int
     TOP_P: float
-    # unused_fields: List[str]
-    
-    # date_var: str
-    # yr_var: str
-    # mnth_var: str
-    # season_var: str
-    # hr_var: str
-    # holiday_var: str
-    # workingday_var: str
-    # weekday_var: str
-    # weathersit_var: str
-    # temp_var: str
-    # atemp_var: str
-    # hum_var: str
-    # windspeed_var: str
-        
-    # yr_mappings: Dict[int, int]
-    # mnth_mappings: Dict[str, int]
-    # season_mappings: Dict[str, int]
-    # weathersit_mappings: Dict[str, int]
-    # holiday_mappings: Dict[str, int]
-    # workingday_mappings: Dict[str, int]
-    # hr_mappings: Dict[str, int]
-    
-    test_size:float
-    random_state: int
+    EARLY_STOPPING: bool
+    NGRAM_SIZE: int
+    LEN_PENALTY: float
+    NUM_BEAMS: int
+    NUM_LOGGING_STEPS: int
+
     n_estimators: int
     max_depth: int
 
@@ -94,7 +69,7 @@ class Config(BaseModel):
     """Master config object."""
 
     app_config: AppConfig
-    model_config: ModelConfig
+    lmodel_config: ModelConfig
 
 
 def find_config_file() -> Path:
@@ -127,8 +102,8 @@ def create_and_validate_config(parsed_config: YAML = None) -> Config:
 
     # specify the data attribute from the strictyaml YAML type.
     _config = Config(
-        app_config = AppConfig(**parsed_config.data),
-        model_config = ModelConfig(**parsed_config.data),
+        app_config= AppConfig(**parsed_config.data),
+        lmodel_config= ModelConfig(**parsed_config.data),
     )
 
     return _config
