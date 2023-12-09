@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 from torchvision import transforms
 from torch.utils.data import Dataset
-from image_captioning.config.core import *
+from config.core import *
 from transformers import AutoTokenizer, ViTFeatureExtractor
 
 def build_inputs_with_special_tokens(self, token_ids_0):
