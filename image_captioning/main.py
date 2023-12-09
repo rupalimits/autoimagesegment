@@ -22,10 +22,7 @@ if __name__ == '__main__':
 
     # read the data
     df_data = pd.read_csv(CAPTIONS_DIR)
-    # # combining all captions for a single image into one string
-    # df_data = df_data.groupby(['image'])['caption'].apply(','.join).reset_index()
-    # retaining only the first caption per image
-    df_data.drop_duplicates(subset=['image'], inplace=True)
+
     # split the data into training and validation
     df_train, temp_df = train_test_split(df_data, test_size=0.2, random_state=config.lmodel_config.SEED)
     df_val, df_test = train_test_split(temp_df, test_size=0.5, random_state=config.lmodel_config.SEED)
