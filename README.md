@@ -23,7 +23,7 @@ rouge2 and bert has to be incorporated and monitoring has to be in place..
 
 - training time
 ```
-ETA - 40 hours
+ETA - 40 hours in windows,19 hours in mac8gb
 Compute - 32 gb /64gb
 ```
 
