@@ -9,7 +9,7 @@ Repository for capstone model.
 - Install the requirements using below code
   
 ```
-pip install -r requirements.txt
+pip install -r requirements/requirements.txt
 ```
 - run the pipeline using below code
 ```
