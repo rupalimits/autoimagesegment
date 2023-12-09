@@ -2,7 +2,7 @@
 import pandas as pd
 from training import run_training
 from utilities.utilities_common import *
-from image_captioning.config.core import *
+from config.core import *
 from sklearn.model_selection import train_test_split
 
 # selecting processor
