@@ -43,9 +43,9 @@ def compute_metrics(eval_pred):
     :return: dict_metrics
     """
     dict_metrics = {"rouge2": [evaluate.load("rouge")],
-                    "bleu": [evaluate.load(METRICS_DIR / 'blue')],
+                    # "bleu": [evaluate.load(METRICS_DIR / 'blue')],
                     "bertscore": [evaluate.load("bertscore")],
-                    "meteor": [evaluate.load(METRICS_DIR / 'meteor')]
+                    # "meteor": [evaluate.load(METRICS_DIR / 'meteor')]
                     }
 
     labels_ids = eval_pred.label_ids
@@ -57,17 +57,18 @@ def compute_metrics(eval_pred):
     label_str = tokenizer.batch_decode(labels_ids, skip_special_tokens=True)
 
     # calculating various metrics
-    rouge_output = dict_metrics["rouge2"][0].compute(predictions=pred_str, references=label_str, rouge_types=["rouge2"])["rouge2"].mid
-    dict_metrics["rouge2"].append({"rouge2_precision": round(rouge_output.precision, 4),  "rouge2_recall": round(rouge_output.recall, 4), "rouge2_fmeasure": round(rouge_output.fmeasure, 4),})
+    rouge_output = dict_metrics["rouge2"][0].compute(predictions=pred_str, references=label_str, rouge_types=["rouge2"])
+    dict_metrics["rouge2"].append({"rouge2_score": rouge_output['rouge2'], })
+    # dict_metrics["rouge2"].append({"rouge2_precision": round(rouge_output.precision, 4),  "rouge2_recall": round(rouge_output.recall, 4), "rouge2_fmeasure": round(rouge_output.fmeasure, 4),})
 
-    bleu_output = dict_metrics["blue"][0].compute(predictions=pred_str, references=label_str)
-    dict_metrics["blue"].append({"bleu_score": bleu_output['bleu'],})
+    # bleu_output = dict_metrics["blue"][0].compute(predictions=pred_str, references=label_str)
+    # dict_metrics["blue"].append({"bleu_score": bleu_output['bleu'],})
 
     bertscore_output = dict_metrics["bertscore"][0].compute(predictions=pred_str, references=label_str, lang="en")
     dict_metrics["bertscore"].append({"bertscore_precision": bertscore_output['precision'], "bertscore_recall": bertscore_output['recall'], "bertscore_f1": bertscore_output['f1']})
 
-    meteor_output = dict_metrics["meteor"][0].compute(predictions=pred_str, references=label_str)
-    dict_metrics["meteor"].append({"meteor_score": meteor_output['meteor'],})
+    # meteor_output = dict_metrics["meteor"][0].compute(predictions=pred_str, references=label_str)
+    # dict_metrics["meteor"].append({"meteor_score": meteor_output['meteor'],})
 
     return dict_metrics
 
