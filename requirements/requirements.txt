@@ -1,0 +1,16 @@
+accelerate>=0.20.1
+bert_score
+datasets
+evaluate
+joblib
+matplotlib
+numpy
+nltk
+pandas
+pydantic
+rouge_score
+ruamel.yaml
+scikit-learn
+strictyaml
+transformers
+torchvision

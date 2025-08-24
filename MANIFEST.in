@@ -1,0 +1,16 @@
+include *.txt
+include *.md
+include *.pkl
+recursive-include ./image_captioning *
+
+
+include image_captioning/VERSION
+include image_captioning/config.yml
+
+include ./requirements/requirements.txt
+include ./requirements/test_requirements.txt
+exclude *.log
+exclude *.cfg
+
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
