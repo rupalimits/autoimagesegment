@@ -95,3 +95,29 @@ This project implements an end-to-end image captioning pipeline by integrating a
 - Add user feedback collection via a frontend interface
 
 ---
+
+To make it easy to use, I made the solution as a CLI application that can be run directly with "python main.py", enabling end-to-end training or inference from the command line.
+
+For training the model on the flickr8k dataset, follow these steps -
+cd ImageCaptioning\
+python3 -m venv .venv\
+source .venv/bin/activate
+
+pip install -r requirements/requirements.txt
+
+cd image_captioning\
+python3 -m main.py
+
+In case you face an error at this step related to punkt, download the punkt from this URL and place it in the home directory of your system (or in the venv folder), following this directory structure -
+
+mkdir nltk_data && cd nltk_data\
+mkdir tokenizers && cd tokenizers\
+Inside this directory structure, put the punkt folder here (which can be downloaded from the following link)\
+https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.zip
+
+
+After training the model, you will see a folder getting generated named VIT_large_gpt2 which will contain the trained model. Now to test the model, I have created a test file.
+
+If you are standing on image_captioning, come to the test folder from the parent folder and run the main file inside the tests folder.\
+cd tests/\
+python3 main.py
